@@ -1,0 +1,18 @@
+# Filter the data for the period leading up to January 1, 2023
+historical_data = weather[weather['datetime'] < '2023-01-01']
+
+# Fill missing values with the previous row values
+historical_data = historical_data.ffill()
+
+# Train the Ridge regression model
+model = Ridge(alpha=0.1)
+model.fit(historical_data[predictors], historical_data['mean'])  # Assuming 'mean' is the target variable
+
+# Extract features for January 1, 2023 (assuming data for Jan 1, 2023 is not available)
+# You can use the last available date or any other date before Jan 1, 2023
+jan_1_2023_features = historical_data[predictors].tail(1)
+
+# Predict the mean temperature for January 1, 2023
+predicted_mean_temperature = model.predict(jan_1_2023_features)
+
+print("Predicted mean temperature for January 1, 2023:", predicted_mean_temperature[0])
